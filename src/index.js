@@ -28,9 +28,9 @@ app.get('/game/application-approved', async function(req, res) {
 	}
 	try {
 		const currentRankId = await noblox.getRankInGroup(groupId, userId);
-		if (currentRankId == 1) {
+		if (currentRankId > 0 && currentRankId < 5) {
 			try {
-				const changeRankResult = await noblox.changeRank(groupId, userId, 1);
+				const changeRankResult = await noblox.setRank(groupId, userId, "Staff In Training");
 				res.sendStatus(200);
 				res.send("Application approved!");
 				return;
