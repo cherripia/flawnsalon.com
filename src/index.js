@@ -20,14 +20,13 @@ async function robloxLogin() {
 
 robloxLogin();
 
+app.post('/game/application-approved', async function(req, res) {
+	console.log('Application approved!');
+	res.send("Application approved!");
+});
+
 app.get('/api', async function(req, res) {
-	try {
-		const currentUser = await noblox.getCurrentUser();
-		console.log(`Current user: ${currentUser.UserName} [${currentUser.UserID}]`);
-	} catch (err) {
-		console.log("Unable to log in!", err);
-	}
-	res.send('api');
+	res.send("api");
 });
 
 app.get('/', function (req, res) { 
