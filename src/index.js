@@ -20,13 +20,32 @@ async function robloxLogin() {
 
 robloxLogin();
 
-app.post('/game/application-approved', async function(req, res) {
-	console.log('Application approved!');
-	res.send("Application approved!");
-});
-
-app.get('/api', async function(req, res) {
-	res.send("api");
+app.get('/game/application-approved', async function(req, res) {
+	const userId = req.query.userId;
+	if (!userId) {
+		res.sendStatus(400);
+		return;
+	}
+	try {
+		const currentRankId = await noblox.getRankInGroup(groupId, userId);
+		if (currentRankId == 1) {
+			try {
+				const changeRankResult = await noblox.changeRank(groupId, userId, 1);
+				res.sendStatus(200);
+				res.send("Application approved!");
+				return;
+			} catch (err) {
+				res.sendStatus(500);
+				return;
+			}
+		} else {
+			res.sendStatus(406);
+			return;
+		}
+	} catch (err) {
+		res.sendStatus(500);
+		return;
+	}
 });
 
 app.get('/', function (req, res) { 
