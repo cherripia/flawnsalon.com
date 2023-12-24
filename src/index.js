@@ -23,7 +23,7 @@ robloxLogin();
 app.get('/game/application-approved', async function(req, res) {
 	const userId = req.query.userId;
 	if (!userId) {
-		res.sendStatus(400);
+		res.status(400).send("Bad request! Missing UserId!");
 		return;
 	}
 	try {
@@ -31,19 +31,18 @@ app.get('/game/application-approved', async function(req, res) {
 		if (currentRankId > 0 && currentRankId < 5) {
 			try {
 				const changeRankResult = await noblox.setRank(groupId, userId, 5);
-				res.sendStatus(200);
-				res.send("Application approved!");
+				res.status(200).send("Application approved!");
 				return;
-			} catch (err) {
-				res.sendStatus(500);
+			} catch (e) {
+				res.status(500).send("Internal server error! Error trying to set rank!");
 				return;
 			}
 		} else {
-			res.sendStatus(406);
+			res.status(406).send("Not acceptable! User is unable to be ranked!");
 			return;
 		}
-	} catch (err) {
-		res.sendStatus(500);
+	} catch (e) {
+		res.status(500).send("Internal server error! Error getting rank in group!");
 		return;
 	}
 });
